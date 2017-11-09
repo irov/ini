@@ -20,6 +20,7 @@ namespace tinyini
 
 	public:
 		bool hasSection( const char * _section ) const;
+        bool hasSettingValue( const char * _section, const char * _key ) const;
 
 	public:
 		const char * getSettingValue( const char * _section, const char * _key ) const;

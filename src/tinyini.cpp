@@ -167,6 +167,28 @@ namespace tinyini
 
 		return false;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool tinyini::hasSettingValue( const char * _section, const char * _key ) const
+    {
+        for( uint32_t index = 0; index != m_settingsCount; ++index )
+        {
+            const Setting & setting = m_settings[index];
+
+            if( strcmp( setting.section, _section ) != 0 )
+            {
+                continue;
+            }
+
+            if( strcmp( setting.key, _key ) != 0 )
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	const char * tinyini::getSettingValue( const char * _section, const char * _key ) const
 	{
