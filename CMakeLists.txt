@@ -1,8 +1,48 @@
-set( MY_LIB_NAME tinyini )
+cmake_minimum_required(VERSION 3.0)
 
-SET( SRC_FILES ${SRC_FILES} include/tinyini/tinyini.h )
-SET( SRC_FILES ${SRC_FILES} src/tinyini.cpp )
+PROJECT(tinyini)
 
-INCLUDE_DIRECTORIES( ${MY_LIB_NAME} include/tinyini )
+OPTION(TINYINI_EXTERNAL_BUILD "TINYINI_EXTERNAL_BUILD" OFF)
 
-ADD_LIBRARY( ${MY_LIB_NAME} ${SRC_FILES} )
+IF( NOT TINYINI_EXTERNAL_BUILD )
+    if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL Intel)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+        MESSAGE("!11")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall /WX")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4710")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4514")        
+    endif()
+
+    IF(MSVC)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+        add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+    ENDIF()
+
+    SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_GENERATOR} )
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_GENERATOR} )    
+ENDIF()
+
+MACRO( ADD_FILTER group_name )
+	SOURCE_GROUP( ${group_name} FILES ${ARGN} )
+	SET( SRC_FILES ${SRC_FILES} ${ARGN} )
+ENDMACRO()
+
+SET( INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/tinyini )
+SET( SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src )
+
+ADD_FILTER(
+tinyini
+	${INCLUDE_DIR}/tinyini.h
+    ${SOURCE_DIR}/tinyini.cpp
+)
+
+INCLUDE_DIRECTORIES( ${PROJECT_NAME} include/tinyini )
+
+ADD_LIBRARY( ${PROJECT_NAME} STATIC ${SRC_FILES} )
