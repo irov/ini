@@ -13,32 +13,35 @@
 
 namespace tinyini
 {
-	//////////////////////////////////////////////////////////////////////////
-	static void s_rtrim( char * s )
-	{
-		size_t len = strlen( s );
+    namespace helper
+    {
+        //////////////////////////////////////////////////////////////////////////
+        inline static void rtrim( char * s )
+        {
+            size_t len = strlen( s );
 
-		char * e = s + len - 1;
+            char * e = s + len - 1;
 
-		while( *e == ' ' || *e == '\t' )
-		{
-			--e;
-		}
+            while( *e == ' ' || *e == '\t' )
+            {
+                --e;
+            }
 
-		*(e + 1) = '\0';
-	}
-	//////////////////////////////////////////////////////////////////////////
-	static char * s_trim( char * s )
-	{
-		while( *s == ' ' || *s == '\t' )
-		{
-			++s;
-		}
+            *(e + 1) = '\0';
+        }
+        //////////////////////////////////////////////////////////////////////////
+        inline static char * trim( char * s )
+        {
+            while( *s == ' ' || *s == '\t' )
+            {
+                ++s;
+            }
 
-		s_rtrim( s );
+            helper::rtrim( s );
 
-		return s;
-	}
+            return s;
+        }
+    }
 	//////////////////////////////////////////////////////////////////////////
 	tinyini::tinyini()
 		: m_settingsCount( 0 )
@@ -66,7 +69,7 @@ namespace tinyini
 	//////////////////////////////////////////////////////////////////////////
 	bool tinyini::loadLine_( char * _line, const char ** _currentSection )
 	{
-		char * trim_line = s_trim( _line );
+		char * trim_line = helper::trim( _line );
 
 		size_t len = strlen( trim_line );
 
@@ -124,12 +127,12 @@ namespace tinyini
 			char * key_str = strstr( trim_line, key );
 			size_t key_len = strlen( key );
 			key_str[key_len] = '\0';
-			s_rtrim( key_str );
+			helper::rtrim( key_str );
 
 			char * value_str = strstr( trim_line + key_len + 1, value );
 			size_t value_len = strlen( value );
 			value_str[value_len] = '\0';
-			s_rtrim( value_str );
+			helper::rtrim( value_str );
 
 			bool successful = this->addSetting_( *_currentSection, key_str, value_str );
 
@@ -141,7 +144,7 @@ namespace tinyini
 			char * key_str = strstr( trim_line, key );
 			size_t key_len = strlen( key );
 			key_str[key_len] = '\0';
-			s_rtrim( key_str );
+			helper::rtrim( key_str );
 
 			bool successful = this->addSetting_( *_currentSection, key_str, key_str + key_len );
 
