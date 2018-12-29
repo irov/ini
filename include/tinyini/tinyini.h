@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #ifndef TINYINI_MAX_SETTINGS
-#define TINYINI_MAX_SETTINGS 512U
+#define TINYINI_MAX_SETTINGS 2048
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,7 @@ namespace tinyini
     {
     public:
         tinyini();
+        ~tinyini();
 
     public:
         bool load( char * _buffer );
