@@ -176,9 +176,9 @@ tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer )
     _ini->error_message[0] = '\0';
 
     const char * section = TINYINI_NULLPTR;
-    for( char * line = strtok( _buffer, "\r\n" );
-        line != TINYINI_NULLPTR;
-        line = strtok( TINYINI_NULLPTR, "\r\n" ) )
+
+    char * line = strtok( _buffer, "\r\n" );
+    for( ; line != TINYINI_NULLPTR; line = strtok( TINYINI_NULLPTR, "\r\n" ) )
     {
         if( __tinyini_load_line( _ini, line, &section ) == TINYINI_RESULT_FAILURE )
         {
@@ -198,7 +198,8 @@ tinyini_result_t tinyini_save( const tinyini_t * _ini, tinyini_save_provider_t _
     const tinyini_property_t * it_property_end = _ini->properties + _ini->property_count;
     for( ; it_property != it_property_end; ++it_property )
     {
-        for( uint32_t section_index = 0; section_index != sections_count; ++section_index )
+        uint32_t section_index = 0;
+        for( ; section_index != sections_count; ++section_index )
         {
             const char * section = sections[section_index];
 
@@ -216,7 +217,8 @@ tinyini_result_t tinyini_save( const tinyini_t * _ini, tinyini_save_provider_t _
 
                 uint32_t properties_count = tinyini_count_properties( _ini, section );
 
-                for( uint32_t property_index = 0; property_index != properties_count; ++property_index )
+                uint32_t property_index = 0;
+                for( ; property_index != properties_count; ++property_index )
                 {
                     const char * property;
                     const char * value;
