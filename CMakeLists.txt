@@ -1,26 +1,23 @@
 cmake_minimum_required(VERSION 3.0)
 
-PROJECT(tinyini)
+PROJECT(tinyini C)
 
 OPTION(TINYINI_EXTERNAL_BUILD "TINYINI_EXTERNAL_BUILD" OFF)
 OPTION(TINYINI_INSTALL "TINYINI_INSTALL" OFF )
 
-IF( NOT TINYINI_EXTERNAL_BUILD )
-    set( CMAKE_CXX_STANDARD 11 )
-    
-    if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL Intel)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
-    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-        MESSAGE("!11")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall /WX")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4710")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4514")        
+IF( NOT TINYINI_EXTERNAL_BUILD )    
+    if(${CMAKE_C_COMPILER_ID} STREQUAL Clang)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL AppleClang)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL GNU)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Wall /WX")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4710")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4514")
     endif()
 
     IF(MSVC)
@@ -43,7 +40,7 @@ SET( SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src )
 ADD_FILTER(
 tinyini
 	${INCLUDE_DIR}/tinyini.h
-    ${SOURCE_DIR}/tinyini.cpp
+    ${SOURCE_DIR}/tinyini.c
 )
 
 INCLUDE_DIRECTORIES( ${PROJECT_NAME} include/tinyini )
@@ -53,7 +50,7 @@ ADD_LIBRARY( ${PROJECT_NAME} STATIC ${SRC_FILES} )
 if(TINYINI_INSTALL)
     install(DIRECTORY include
         DESTINATION .
-        FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
+        FILES_MATCHING PATTERN "*.h")
 
     install(TARGETS ${PROJECT_NAME}
         LIBRARY DESTINATION lib

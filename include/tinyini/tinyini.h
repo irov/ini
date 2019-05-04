@@ -1,57 +1,48 @@
-#pragma once
+#ifndef TINYINI_H_
+#define TINYINI_H_
 
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef TINYINI_MAX_SETTINGS
-#define TINYINI_MAX_SETTINGS 2048
+#ifndef TINYINI_MAX_PROPERTIES
+#define TINYINI_MAX_PROPERTIES 2048
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-namespace tinyini
+
+typedef struct tinyini_property_t
 {
-    class tinyini
-    {
-    public:
-        tinyini();
-        ~tinyini();
+    const char * section;
+    const char * property;
+    const char * value;
+} tinyini_property_t;
 
-    public:
-        bool load( char * _buffer );
+typedef struct tinyini_t
+{
+    tinyini_property_t properties[TINYINI_MAX_PROPERTIES];
+    uint32_t property_count;
 
-    public:
-        bool hasSection( const char * _section ) const;
-        bool hasSettingValue( const char * _section, const char * _key ) const;
+    char error_message[256];
+} tinyini_t;
 
-    public:
-        const char * getSettingValue( const char * _section, const char * _key ) const;
+typedef uint32_t tinyini_result_t;
 
-    public:
-        uint32_t countSettingValues( const char * _section, const char * _key ) const;
-        const char * getSettingValues( const char * _section, const char * _key, uint32_t _index ) const;
+#define TINYINI_RESULT_SUCCESSFUL (0)
+#define TINYINI_RESULT_FAILURE (1)
 
-    public:
-        bool getSettings( const char * _section, uint32_t _index, const char ** _key, const char ** _value ) const;
-        uint32_t countSettings( const char * _section ) const;
+tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer );
 
-    public:
-        const char * getError() const;
+typedef void( *tinyini_save_provider_t )(const char * _line, void * _ud);
+tinyini_result_t tinyini_save( const tinyini_t * _ini, tinyini_save_provider_t _provider, void * _ud );
 
-    protected:
-        bool addSetting_( const char * _section, const char * _key, const char * _value );
-        bool loadLine_( char * _buf, const char ** _currentSection );
+const char * tinyini_get_error_message( const tinyini_t * _ini );
 
-    protected:
-        struct Setting
-        {
-            const char * section;
-            const char * key;
-            const char * value;
-        };
+tinyini_result_t tinyini_has_section( const tinyini_t * _ini, const char * _section );
+tinyini_result_t tinyini_has_property( const tinyini_t * _ini, const char * _section, const char * _property );
+const char * tinyini_get_property_value( const tinyini_t * _ini, const char * _section, const char * _property );
+uint32_t tinyini_count_property_values( const tinyini_t * _ini, const char * _section, const char * _property );
+const char * tinyini_get_property_values( const tinyini_t * _ini, const char * _section, const char * _property, uint32_t _index );
+uint32_t tinyini_count_properties( const tinyini_t * _ini, const char * _section );
+tinyini_result_t tinyini_get_properties( const tinyini_t * _ini, const char * _section, uint32_t _index, const char ** _property, const char ** _value );
 
-        Setting m_settings[TINYINI_MAX_SETTINGS];
-        uint32_t m_settingsCount;
-
-        char m_error[256];
-    };
-}
+#endif
