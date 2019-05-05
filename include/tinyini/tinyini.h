@@ -40,6 +40,7 @@ const char * tinyini_get_error_message( const tinyini_t * _ini );
 tinyini_result_t tinyini_has_section( const tinyini_t * _ini, const char * _section );
 tinyini_result_t tinyini_has_property( const tinyini_t * _ini, const char * _section, const char * _property );
 const char * tinyini_get_property_value( const tinyini_t * _ini, const char * _section, const char * _property );
+tinyini_result_t tinyini_equal_property_value( const tinyini_t * _ini, const char * _section, const char * _property, const char * _value );
 uint32_t tinyini_count_property_values( const tinyini_t * _ini, const char * _section, const char * _property );
 const char * tinyini_get_property_values( const tinyini_t * _ini, const char * _section, const char * _property, uint32_t _index );
 uint32_t tinyini_count_properties( const tinyini_t * _ini, const char * _section );

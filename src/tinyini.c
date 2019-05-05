@@ -307,6 +307,33 @@ const char * tinyini_get_property_value( const tinyini_t * _ini, const char * _s
     return TINYINI_NULLPTR;
 }
 //////////////////////////////////////////////////////////////////////////
+tinyini_result_t tinyini_equal_property_value( const tinyini_t * _ini, const char * _section, const char * _property, const char * _value )
+{
+    const tinyini_property_t * it_property = _ini->properties;
+    const tinyini_property_t * it_property_end = _ini->properties + _ini->property_count;
+    for( ; it_property != it_property_end; ++it_property )
+    {
+        if( strcmp( it_property->section, _section ) != 0 )
+        {
+            continue;
+        }
+
+        if( strcmp( it_property->property, _property ) != 0 )
+        {
+            continue;
+        }
+
+        if( strcmp( it_property->value, _value ) != 0 )
+        {
+            continue;
+        }
+
+        return TINYINI_RESULT_SUCCESSFUL;
+    }
+
+    return TINYINI_RESULT_FAILURE;
+}
+//////////////////////////////////////////////////////////////////////////
 uint32_t tinyini_count_property_values( const tinyini_t * _ini, const char * _section, const char * _property )
 {
     uint32_t count = 0;
