@@ -1,3 +1,34 @@
+/******************************************************************************
+*
+* Author, Yuriy Levchenko <irov13@mail.ru>
+*
+* This is free and unencumbered software released into the public domain.
+*
+* Anyone is free to copy, modify, publish, use, compile, sell, or
+* distribute this software, either in source code form or as a compiled
+* binary, for any purpose, commercial or non - commercial, and by any
+* means.
+*
+* In jurisdictions that recognize copyright laws, the author or authors
+* of this software dedicate any and all copyright interest in the
+* software to the public domain.We make this dedication for the benefit
+* of the public at large and to the detriment of our heirs and
+* successors.We intend this dedication to be an overt act of
+* relinquishment in perpetuity of all present and future rights to this
+* software under copyright law.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+* OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*
+* For more information, please refer to <http://unlicense.org/>
+*
+*****************************************************************************/
+
 #include "tinyini.h"
 
 #include <stdio.h>
@@ -183,56 +214,6 @@ tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer )
         if( __tinyini_load_line( _ini, line, &section ) == TINYINI_RESULT_FAILURE )
         {
             return TINYINI_RESULT_FAILURE;
-        }
-    }
-
-    return TINYINI_RESULT_SUCCESSFUL;
-}
-//////////////////////////////////////////////////////////////////////////
-tinyini_result_t tinyini_save( const tinyini_t * _ini, tinyini_save_provider_t _provider, void * _ud )
-{
-    const char * sections[256];
-    uint32_t sections_count = 0;
-
-    const tinyini_property_t * it_property = _ini->properties;
-    const tinyini_property_t * it_property_end = _ini->properties + _ini->property_count;
-    for( ; it_property != it_property_end; ++it_property )
-    {
-        uint32_t section_index = 0;
-        for( ; section_index != sections_count; ++section_index )
-        {
-            const char * section = sections[section_index];
-
-            if( strcmp( it_property->section, section ) == 0 )
-            {
-                sections[sections_count] = it_property->section;
-                ++sections_count;
-
-                char line_message[2048];
-                sprintf( line_message, "[%s]\n"
-                    , section
-                );
-
-                (*_provider)(line_message, _ud);
-
-                uint32_t properties_count = tinyini_count_properties( _ini, section );
-
-                uint32_t property_index = 0;
-                for( ; property_index != properties_count; ++property_index )
-                {
-                    const char * property;
-                    const char * value;
-                    if( tinyini_get_properties( _ini, section, property_index, &property, &value ) == TINYINI_RESULT_SUCCESSFUL )
-                    {
-                        sprintf( line_message, "%s=%s\n"
-                            , property
-                            , value
-                        );
-
-                        (*_provider)(line_message, _ud);
-                    }
-                }
-            }
         }
     }
 
