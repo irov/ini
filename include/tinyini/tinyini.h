@@ -65,8 +65,14 @@ typedef uint32_t tinyini_result_t;
 #define TINYINI_RESULT_FAILURE (1)
 
 /**
+@brief initialize ini struct
+@param [in] _ini tinyini struct.
+*/
+void tinyini_initialize( tinyini_t * _ini );
+
+/**
 @brief load ini from buffer
-@param [out] _ini tinyini struct.
+@param [in] _ini tinyini struct.
 @param [in] _buffer mutable ini buffer.
 */
 tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer );

@@ -201,11 +201,14 @@ static tinyini_result_t __tinyini_load_line( tinyini_t * _ini, char * _line, con
     return TINYINI_RESULT_FAILURE;
 }
 //////////////////////////////////////////////////////////////////////////
-tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer )
+void tinyini_initialize( tinyini_t * _ini )
 {
     _ini->property_count = 0;
     _ini->error_message[0] = '\0';
-
+}
+//////////////////////////////////////////////////////////////////////////
+tinyini_result_t tinyini_load( tinyini_t * _ini, char * _buffer )
+{
     const char * section = TINYINI_NULLPTR;
 
     char * line = strtok( _buffer, "\r\n" );
